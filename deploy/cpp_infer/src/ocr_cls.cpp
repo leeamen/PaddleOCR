@@ -25,7 +25,7 @@ cv::Mat Classifier::Run(cv::Mat &img) {
   int index = 0;
   float wh_ratio = float(img.cols) / float(img.rows);
 
-  this->resize_op_.Run(img, resize_img, cls_image_shape);
+  this->resize_op_.Run(img, resize_img, this->use_tensorrt_, cls_image_shape);
 
   this->normalize_op_.Run(&resize_img, this->mean_, this->scale_,
                           this->is_scale_);
@@ -88,7 +88,7 @@ void Classifier::LoadModel(const std::string &model_dir) {
     if (this->use_mkldnn_) {
       config.EnableMKLDNN();
     }
-    config.SetCpuMathLibraryNumThreads(this->cpu_math_library_num_threads_)
+    config.SetCpuMathLibraryNumThreads(this->cpu_math_library_num_threads_);
   }
 
   // false for zero copy tensor
